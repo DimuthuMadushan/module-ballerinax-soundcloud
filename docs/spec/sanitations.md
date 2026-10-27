@@ -1,6 +1,6 @@
 _Author_:  @DimuthuMadushan \
 _Created_: 2026/10/26 \
-_Updated_: 2026/10/26 \
+_Updated_: 2026/10/27 \
 _Edition_: Swan Lake
 
 # Sanitation for OpenAPI specification
@@ -36,7 +36,11 @@ These changes are done in order to improve the overall usability, and as workaro
 
 11. **Deprecated operations removed.** The eight operations marked `deprecated: true` were deleted, along with path items left empty and components only they used: `GET /me/activities`, `GET /me/activities/all/own`, `GET /me/activities/tracks`, `GET /me/followings/{user_urn}`, `GET /me/followers/{follower_urn}`, `GET /users/{user_urn}/favorites`, `GET /users/{user_urn}/followings/{following_urn}` and `DELETE /reposts/tracks/{track_urn}`. Changed in `docs/spec/openapi.yaml`.
 
+12. **Multipart file parts restored in `uploadTrack`.** The generated client converts the payload with `jsondata:toJson` before `createBodyParts`, which turns the `trackAssetData` and `trackArtworkData` file records into plain JSON, so they were sent as text fields without a filename. `ballerina/client.bal` puts the original file records back into the converted payload before building the body parts. This is a hand edit to generated code and must be re-applied after every client regeneration.
+
 ## OpenAPI cli command
+
+The edits above are made in `docs/spec/openapi.yaml`, the authoritative spec. The connector generation pipeline flattens and aligns it into `docs/spec/aligned_ballerina_openapi.json` (names persisted in `docs/spec/ai-mappings.json`), which is the input to the command below.
 
 The following command was used to generate the Ballerina client from the OpenAPI specification. The command should be executed from the repository root directory.
 

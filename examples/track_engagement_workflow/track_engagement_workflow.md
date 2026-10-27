@@ -4,7 +4,7 @@ This example reads a track, lists the users who liked it and the comments on it,
 
 ## Prerequisites
 
-1. A SoundCloud access token from an application registered on [SoundCloud for Developers](https://soundcloud.com/you/apps).
+1. A SoundCloud access token for an application registered on [SoundCloud for Developers](https://soundcloud.com/you/apps). With `engage = true` the example likes and comments on the track as a user, which needs a user token obtained through the authorization code flow with the user's consent. Follow the [authorization code steps](https://developers.soundcloud.com/docs/api/guide#authentication) to get one.
 
 2. Create a `Config.toml` file in the example directory with the following values.
 

@@ -9,7 +9,7 @@ configurable string commentText = "Great track!";
 configurable boolean engage = false;
 
 public function main() returns error? {
-    soundcloud:Client soundcloudClient = check new ({auth: {token: accessToken}});
+    soundcloud:Client soundcloudClient = check new ({auth: {authorization: "OAuth " + accessToken}});
 
     // Step 1: Read the track details.
     soundcloud:Track track = check soundcloudClient->getTrack(trackUrn);
@@ -17,13 +17,13 @@ public function main() returns error? {
     io:println("Plays: ", track?.playbackCount ?: 0, ", likes: ", track?.favoritingsCount ?: 0);
 
     // Step 2: List the users who liked the track.
-    soundcloud:Users favoriters = check soundcloudClient->listTrackFavoriters(trackUrn, 'limit = 10);
+    soundcloud:Users favoriters = check soundcloudClient->listTrackFavoriters(trackUrn, 'limit = 10, linkedPartitioning = true);
     foreach soundcloud:User fan in favoriters?.collection ?: [] {
         io:println("  liked by ", fan?.username ?: "unknown");
     }
 
     // Step 3: Read the existing comments.
-    soundcloud:Comments comments = check soundcloudClient->listTrackComments(trackUrn, 'limit = 10);
+    soundcloud:Comments comments = check soundcloudClient->listTrackComments(trackUrn, 'limit = 10, linkedPartitioning = true);
     foreach soundcloud:Comment existing in comments?.collection ?: [] {
         io:println("  comment: ", existing?.body ?: "");
     }

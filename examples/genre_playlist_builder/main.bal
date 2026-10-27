@@ -10,7 +10,7 @@ configurable int maxTracks = 5;
 configurable boolean createPlaylist = false;
 
 public function main() returns error? {
-    soundcloud:Client soundcloudClient = check new ({auth: {token: accessToken}});
+    soundcloud:Client soundcloudClient = check new ({auth: {authorization: "OAuth " + accessToken}});
 
     // Step 1: Search tracks that match the genre and search term.
     soundcloud:TracksResult searchResult = check soundcloudClient->searchTracks(

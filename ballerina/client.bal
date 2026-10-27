@@ -330,7 +330,16 @@ public isolated client class Client {
         }
         map<string|string[]> httpHeaders = http:getHeaderMap(headerValues);
         http:Request request = new;
-        mime:Entity[] bodyParts = check createBodyParts(check jsondata:toJson(payload).ensureType());
+        record {|anydata...;|} formData = check jsondata:toJson(payload).ensureType();
+        record {byte[] fileContent; string fileName;}? trackAssetData = payload?.trackAssetData;
+        if trackAssetData is record {byte[] fileContent; string fileName;} {
+            formData["track[asset_data]"] = trackAssetData;
+        }
+        record {byte[] fileContent; string fileName;}? trackArtworkData = payload?.trackArtworkData;
+        if trackArtworkData is record {byte[] fileContent; string fileName;} {
+            formData["track[artwork_data]"] = trackArtworkData;
+        }
+        mime:Entity[] bodyParts = check createBodyParts(formData);
         request.setBodyParts(bodyParts);
         return self.clientEp->post(resourcePath, request, httpHeaders);
     }
